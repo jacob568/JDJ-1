@@ -19,10 +19,17 @@ def copy_range():
 
     #Splitting the column into two & formatting
     area_measurements["Comments"] = area_measurements["Comments"].str.split(n=1,expand=False)
+    Name = [area_measurements["Comments"].str.slice(1)]
+    #test = splitBuildingAndMeasurement(Name)
+
+    ## ^^ This doesnt split properly (Outputs: [601 426.54 sq m] and doesnt separate second space.
+
     result = pd.merge(area_measurements["Comments"] , subject["Subject"], left_index=True, right_index=True, how='outer')
 
-    print(result)
+    #print(test)
 
+    print(Name)
+    #print(result)
     # This needs a for loop that iterates through "Comments" and formats the data properly for Output.
     #
 
