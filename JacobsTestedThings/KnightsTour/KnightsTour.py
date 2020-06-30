@@ -34,7 +34,6 @@ def solve():
 	movementCounter = 1
 
 	attempts = GetPossibleMovesForLocation([0, 0])
-	attemptedMoves = []
 
 	while not CheckComplete(board, 8):
 		#If the list of possible movements has exhausted for this square
@@ -47,9 +46,9 @@ def solve():
 			movementCounter -= 1
 			reverseMove = MovementHistory.pop()
 			#Undo the last move
-			KnightPosition = [KnightPosition[0] - reverseMove[0], KnightPosition[1] - reverseMove[1]]
+			KnightPosition = [KnightPosition[0] - reverseMove[0][0], KnightPosition[1] - reverseMove[0][1]]
 			#print(attemptedMoves[KnightPosition[0]][KnightPosition[1]])
-			attempts = attemptedMoves.pop()
+			attempts = reverseMove[1]
 			continue
 
 
@@ -57,19 +56,20 @@ def solve():
 		direction = attempts.pop(random.randint(0, len(attempts) - 1))
 		newDirection = MoveDirection(direction)
 		newPosition = GetNewPosition(KnightPosition, newDirection)
+
+		if (board[newPosition[0]][newPosition[1]] != "e"):
+			continue
+
 		if (board[newPosition[0]][newPosition[1]] == "e"):
 			board[newPosition[0]][newPosition[1]] = movementCounter
-			MovementHistory.append(newDirection)
+			MovementHistory.append([newDirection, attempts])
 
-			attemptedMoves.append(attempts)
 
 			movementCounter += 1
 			KnightPosition = [newPosition[0], newPosition[1]]
 			attempts = GetPossibleMovesForLocation(KnightPosition)
-			continue
-			printGrid(board, 8)
-			print(" ")
-
+			#printGrid(board, 8)
+			#print(" ")
 	return board
 
 def GetPossibleMovesForLocation(currentLocation):
@@ -83,13 +83,10 @@ def GetPossibleMovesForLocation(currentLocation):
 			possibleAttempts.append(i)
 	return possibleAttempts
 
-def AddAttemptToList(attemptedMoves, attempts):
-	attemptedMoves.append(attempts)
-	return attemptedMoves
 
-def MoveBackASpace(moveHistory, attemptedMoves):
-	del moveHistory[-1]
-	attempts = attemptedMoves.pop()
+def MoveBackASpace(moveHistory):
+	previousLocation = moveHistory.pop()
+	return previousLocation
 
 def GetNewPosition(currentPosition, moveDirection):
 	return [currentPosition[0] + moveDirection[0], currentPosition[1] + moveDirection[1]]

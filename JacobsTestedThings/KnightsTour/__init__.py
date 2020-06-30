@@ -45,11 +45,11 @@ def solve():
 			#Return to untouched state
 			board[KnightPosition[0]][KnightPosition[1]] = "e"
 			movementCounter -= 1
-			reverseMove = MovementHistory.pop()
+			reverseMove = MoveBackASpace(MovementHistory)
 			#Undo the last move
-			KnightPosition = [KnightPosition[0] - reverseMove[0], KnightPosition[1] - reverseMove[1]]
+			KnightPosition = [KnightPosition[0] - reverseMove[0][0], KnightPosition[1] - reverseMove[1]]
 			#print(attemptedMoves[KnightPosition[0]][KnightPosition[1]])
-			attempts = attemptedMoves.pop()
+			attempts = reverseMove[1]
 			continue
 
 
@@ -61,9 +61,9 @@ def solve():
 			continue
 		if (board[newPosition[0]][newPosition[1]] == "e"):
 			board[newPosition[0]][newPosition[1]] = movementCounter
-			MovementHistory.append(newDirection)
+			MovementHistory.append([newDirection, attempts])
 
-			attemptedMoves.append(attempts)
+			#attemptedMoves.append(attempts)
 
 			movementCounter += 1
 			KnightPosition = [newPosition[0], newPosition[1]]
@@ -85,22 +85,21 @@ def GetPossibleMovesForLocation(currentLocation):
 			possibleAttempts.append(i)
 	return possibleAttempts
 
-def AddAttemptToList(attemptedMoves, attempts):
-	attemptedMoves.append(attempts)
-	return attemptedMoves
-
-def MoveBackASpace(moveHistory, attemptedMoves):
-	del moveHistory[-1]
-	attempts = attemptedMoves.pop()
+def MoveBackASpace(moveHistory):
+	previousLocation = moveHistory.pop()
+	return previousLocation
 
 def GetNewPosition(currentPosition, moveDirection):
 	return [currentPosition[0] + moveDirection[0], currentPosition[1] + moveDirection[1]]
+
+def GetPreviousPosition(currentPosition, moveDirection):
+	return [currentPosition[0] - moveDirection[0], currentPosition[1] - moveDirection[1]]
 
 def MoveDirection(direction):
 	directions = {
 		0 : [2, 1],
 		1 : [1, 2],
-		2 : [-1, 2],
+		2 : [-1, 2],1
 		3 : [-2, 1],
 		4 : [-2, -1],
 		5 : [-1, -2],

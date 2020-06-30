@@ -1,5 +1,5 @@
 import unittest
-from KnightsTour import MoveDirection, CheckComplete, createGrid, GetNewPosition, AddAttemptToList, GetPossibleMovesForLocation
+from KnightsTour import MoveDirection, CheckComplete, createGrid, GetNewPosition, GetPossibleMovesForLocation, MoveBackASpace, GetPreviousPosition
 
 class TestThingyMethods(unittest.TestCase):
 	def test_move_direction_correct_result(self):
@@ -59,12 +59,6 @@ class TestThingyMethods(unittest.TestCase):
 		result = GetNewPosition(param1, param2)
 		self.assertEqual(result, [8, 1])
 
-	def test_add_attempts_to_attempted_actions_list(self):
-		param1 = [[1, 4, 5, 7], [0, 1, 2, 3, 4, 5, 6, 7], [2, 4]]
-		param2 = [1, 3, 5, 7]
-		result = AddAttemptToList(param1, param2)
-		self.assertEqual(result, [[1, 4, 5, 7], [0, 1, 2, 3, 4, 5, 6, 7], [2, 4], [1, 3, 5, 7]])
-
 	def test_get_possible_moves(self):
 		result = GetPossibleMovesForLocation([0, 0])
 		self.assertEqual(result, [0, 1])
@@ -80,3 +74,13 @@ class TestThingyMethods(unittest.TestCase):
 	def test_get_possible_moves4(self):
 		result = GetPossibleMovesForLocation([0, 5])
 		self.assertEqual(result, [0, 1, 6, 7])
+
+	def test_move_back_a_space(self):
+		inputValue = [[[2, 1], [1, 2, 3, 5, 6]], [[-2, 1], [4, 5, 6, 7]], [[1, -2], [0, 2, 5]]]
+		result = MoveBackASpace(inputValue)
+		self.assertEqual(result, [[1, -2], [0, 2, 5]])
+
+	def test_move_back_a_space2(self):
+		inputValue = [[[2, 1], [1, 2, 3, 5, 6]], [[-2, 1], [4, 5, 6, 7]], [[1, -2], [0, 2, 5]]]
+		result = MoveBackASpace(inputValue)
+		self.assertEqual(result[1], [0, 2, 5])
